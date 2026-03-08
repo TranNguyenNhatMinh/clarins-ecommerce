@@ -10,10 +10,10 @@ export default function ServicesSection() {
       <div className="max-w-[88rem] mx-auto px-3 sm:px-4 lg:px-5">
         <header className="text-center mb-12 md:mb-16">
           <h2 className="text-2xl md:text-3xl font-light text-gray-900 tracking-wide mb-2">
-            Dịch vụ độc quyền
+            Our exclusive services
           </h2>
           <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
-            Trải nghiệm thương hiệu
+            Brand experience
           </p>
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
@@ -36,7 +36,7 @@ export default function ServicesSection() {
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">{s.desc}</p>
                 <span className="inline-block mt-3 text-xs font-medium tracking-widest uppercase text-gray-600 group-hover:text-brand transition">
-                  Tìm hiểu thêm
+                  Learn more
                 </span>
               </div>
             </Link>

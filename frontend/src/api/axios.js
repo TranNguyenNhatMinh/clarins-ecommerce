@@ -1,7 +1,9 @@
 /**
  * Axios instance - gắn token và xử lý lỗi chung
+ * 401: gọi logout (authRef) rồi navigate SPA về /login, không reload trang
  */
 import axios from 'axios';
+import { authRef, navigateRef } from './navigateRef.js';
 
 const baseURL = import.meta.env.VITE_API_URL || '';
 
@@ -18,14 +20,17 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Xử lý 401 (token hết hạn / không hợp lệ)
+// Xử lý 401 (token hết hạn / không hợp lệ) - SPA redirect
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      authRef.current?.logout?.();
+      if (navigateRef.current) {
+        navigateRef.current('/login');
+      } else {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(err);
   }

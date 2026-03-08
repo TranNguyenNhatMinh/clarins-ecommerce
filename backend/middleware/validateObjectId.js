@@ -8,7 +8,7 @@ import { error } from '../utils/response.js';
 export const validateObjectId = (paramName = 'id') => (req, res, next) => {
   const id = req.params[paramName];
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    return error(res, 'ID không hợp lệ.', 400);
+    return error(res, 'Invalid ID.', 400);
   }
   next();
 };

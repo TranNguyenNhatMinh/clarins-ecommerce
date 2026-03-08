@@ -1,12 +1,15 @@
 /**
- * Script seed - tạo admin và sản phẩm mẫu (chạy: node scripts/seed.js)
+ * Script seed - tạo admin và sản phẩm mẫu (chạy: node scripts/seed.js hoặc npm run seed)
  */
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import User from '../models/User.js';
 import Product from '../models/Product.js';
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const seed = async () => {
   await mongoose.connect(process.env.MONGODB_URI);
@@ -18,19 +21,19 @@ const seed = async () => {
       password: 'admin123',
       role: 'admin',
     });
-    console.log('✓ Đã tạo admin: admin@example.com / admin123');
+    console.log('✓ Created admin: admin@example.com / admin123');
   } else {
-    console.log('Admin đã tồn tại.');
+    console.log('Admin already exists.');
   }
 
   const count = await Product.countDocuments();
   if (count === 0) {
     await Product.insertMany([
-      { name: 'Laptop Dell XPS 15', description: 'Laptop cao cấp, màn hình 15 inch', price: 25000000, category: 'Điện tử', image: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400' },
-      { name: 'iPhone 15 Pro', description: 'Smartphone Apple flagship', price: 29900000, category: 'Điện thoại', image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400' },
-      { name: 'Tai nghe Sony WH-1000XM5', description: 'Tai nghe chống ồn', price: 6990000, category: 'Phụ kiện', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400' },
+      { name: 'Face Serum', description: 'Premium face serum', price: 250000, category: 'face', image: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400' },
+      { name: 'Lipstick Set', description: 'Matte lipstick collection', price: 299000, category: 'makeup', image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400' },
+      { name: 'Body Lotion', description: 'Hydrating body lotion', price: 199000, category: 'body', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400' },
     ]);
-    console.log('✓ Đã tạo 3 sản phẩm mẫu.');
+    console.log('✓ Created 3 sample products.');
   }
   await mongoose.disconnect();
   process.exit(0);

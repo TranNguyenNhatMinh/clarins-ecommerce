@@ -4,12 +4,24 @@
  */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../api/services/authService.js';
+import { authRef } from '../api/navigateRef.js';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  useEffect(() => {
+    authRef.current = { logout };
+    return () => { authRef.current = null; };
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -41,12 +53,6 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user', JSON.stringify(u));
     setUser(u);
     return data;
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
   };
 
   const updateUser = (updated) => {

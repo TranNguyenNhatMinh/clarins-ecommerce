@@ -31,10 +31,11 @@ export default function Profile() {
     setMessage({ text: '', type: 'success' });
     try {
       const data = await userService.updateProfile({ name });
-      updateUser(data.data);
-      setMessage({ text: 'Cập nhật thành công!', type: 'success' });
+      const u = data.data;
+      updateUser(u ? { ...u, id: u._id ?? u.id } : u);
+      setMessage({ text: 'Profile updated successfully!', type: 'success' });
     } catch (err) {
-      setMessage({ text: err.response?.data?.message || 'Cập nhật thất bại.', type: 'error' });
+      setMessage({ text: err.response?.data?.message || 'Update failed.', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -45,10 +46,10 @@ export default function Profile() {
   return (
     <div className="max-w-md mx-auto px-4 py-12">
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Hồ sơ cá nhân</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Profile</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
             <input
               type="text"
               value={name}
@@ -60,7 +61,7 @@ export default function Profile() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input type="email" value={user?.email || ''} disabled className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500" />
-            <p className="text-xs text-gray-400 mt-1">Email không thể thay đổi.</p>
+            <p className="text-xs text-gray-400 mt-1">Email cannot be changed.</p>
           </div>
           <div>
             <span className="inline-block px-2 py-0.5 rounded text-sm bg-gray-100 text-gray-600">{user?.role === 'admin' ? 'Admin' : 'User'}</span>
@@ -70,7 +71,7 @@ export default function Profile() {
             disabled={loading}
             className="w-full py-2.5 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50"
           >
-            {loading ? 'Đang lưu...' : 'Cập nhật'}
+            {loading ? 'Saving...' : 'Update'}
           </button>
         </form>
       </div>

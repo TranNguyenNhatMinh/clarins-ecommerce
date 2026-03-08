@@ -1,10 +1,16 @@
 /**
- * Validation for profile update
+ * Validation cho newsletter subscribe - email đúng định dạng
  */
 import { body, validationResult } from 'express-validator';
 
-export const updateProfileValidation = [
-  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty').isLength({ max: 50 }).withMessage('Name must be at most 50 characters'),
+export const subscribeValidation = [
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Vui lòng nhập email')
+    .isEmail()
+    .withMessage('Email không hợp lệ')
+    .normalizeEmail(),
 ];
 
 export const validate = (req, res, next) => {

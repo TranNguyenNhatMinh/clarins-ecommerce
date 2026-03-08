@@ -23,30 +23,48 @@ export default function AdminProducts() {
   }, []);
 
   const handleCreate = (payload) => {
-    return productService.create(payload).then(() => {
-      setMessage({ text: 'Tạo sản phẩm thành công.', type: 'success' });
-      setModal(null);
-      fetchProducts();
-    });
+    setLoading(true);
+    return productService
+      .create(payload)
+      .then(() => {
+        setMessage({ text: 'Product created successfully.', type: 'success' });
+        setModal(null);
+        fetchProducts();
+      })
+      .catch((err) => {
+        setLoading(false);
+        throw err;
+      });
   };
 
   const handleUpdate = (id, payload) => {
-    return productService.update(id, payload).then(() => {
-      setMessage({ text: 'Cập nhật thành công.', type: 'success' });
-      setModal(null);
-      fetchProducts();
-    });
+    setLoading(true);
+    return productService
+      .update(id, payload)
+      .then(() => {
+        setMessage({ text: 'Update successful.', type: 'success' });
+        setModal(null);
+        fetchProducts();
+      })
+      .catch((err) => {
+        setLoading(false);
+        throw err;
+      });
   };
 
   const handleDelete = (id, name) => {
-    if (!window.confirm(`Bạn có chắc muốn xóa "${name}"?`)) return;
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
+    setLoading(true);
     productService
       .delete(id)
       .then(() => {
-        setMessage({ text: 'Đã xóa sản phẩm.', type: 'success' });
+        setMessage({ text: 'Product deleted.', type: 'success' });
         fetchProducts();
       })
-      .catch((err) => setMessage({ text: err.response?.data?.message || 'Xóa thất bại.', type: 'error' }));
+      .catch((err) => {
+        setMessage({ text: err.response?.data?.message || 'Delete failed.', type: 'error' });
+        setLoading(false);
+      });
   };
 
   if (loading) return <LoadingSpinner />;
@@ -54,12 +72,12 @@ export default function AdminProducts() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Quản lý sản phẩm</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Product management</h2>
         <button
           onClick={() => setModal('create')}
           className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
         >
-          Thêm sản phẩm
+          Add product
         </button>
       </div>
 
@@ -68,11 +86,12 @@ export default function AdminProducts() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hình</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh mục</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beauty Must Have</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -86,25 +105,26 @@ export default function AdminProducts() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900">{p.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{new Intl.NumberFormat('vi-VN').format(p.price)} ₫</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{p.category}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{new Intl.NumberFormat('en-US').format(p.price)} ₫</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{p.category || '—'}</td>
+                  <td className="px-6 py-4 text-sm">{p.isBeautyMustHave ? <span className="text-primary-600 font-medium">Yes</span> : <span className="text-gray-400">No</span>}</td>
                   <td className="px-6 py-4 text-right space-x-2">
-                    <button onClick={() => setModal({ id: p._id, product: p })} className="text-primary-600 hover:underline text-sm">Sửa</button>
-                    <button onClick={() => handleDelete(p._id, p.name)} className="text-red-600 hover:underline text-sm">Xóa</button>
+                    <button onClick={() => setModal({ id: p._id, product: p })} className="text-primary-600 hover:underline text-sm">Edit</button>
+                    <button onClick={() => handleDelete(p._id, p.name)} className="text-red-600 hover:underline text-sm">Delete</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {products.length === 0 && <p className="p-6 text-center text-gray-500">Chưa có sản phẩm nào.</p>}
+        {products.length === 0 && <p className="p-6 text-center text-gray-500">No products yet.</p>}
       </div>
 
       {modal === 'create' && (
         <ProductForm
           onClose={() => setModal(null)}
           onSubmit={handleCreate}
-          title="Thêm sản phẩm"
+          title="Add product"
         />
       )}
       {modal?.id && (
@@ -112,7 +132,7 @@ export default function AdminProducts() {
           initial={modal.product}
           onClose={() => setModal(null)}
           onSubmit={(payload) => handleUpdate(modal.id, payload)}
-          title="Sửa sản phẩm"
+          title="Edit product"
         />
       )}
 

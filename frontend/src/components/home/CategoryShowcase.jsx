@@ -10,10 +10,10 @@ export default function CategoryShowcase() {
       <div className="max-w-[88rem] mx-auto px-3 sm:px-4 lg:px-5">
         <header className="text-center mb-12 md:mb-16">
           <h2 className="text-2xl md:text-3xl font-light text-gray-900 tracking-wide mb-2">
-            Làn da của bạn. Chuyên môn của chúng tôi.
+            Your skin. Our expertise.
           </h2>
           <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
-            Khám phá công thức phù hợp với bạn
+            Discover our tailored formulas
           </p>
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

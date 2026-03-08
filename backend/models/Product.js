@@ -1,36 +1,45 @@
 /**
- * Product model - thông tin sản phẩm
+ * Product model
  */
 import mongoose from 'mongoose';
+import { PRODUCT_CATEGORIES } from '../constants/product.js';
 
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Vui lòng nhập tên sản phẩm'],
+      required: [true, 'Please enter product name'],
       trim: true,
-      maxlength: [100, 'Tên tối đa 100 ký tự'],
+      maxlength: [100, 'Name must be at most 100 characters'],
     },
     description: {
       type: String,
       default: '',
-      maxlength: [500, 'Mô tả tối đa 500 ký tự'],
+      maxlength: [500, 'Description must be at most 500 characters'],
     },
     price: {
       type: Number,
-      required: [true, 'Vui lòng nhập giá'],
-      min: [0, 'Giá không được âm'],
+      required: [true, 'Please enter price'],
+      min: [0, 'Price cannot be negative'],
     },
     category: {
       type: String,
-      required: [true, 'Vui lòng chọn danh mục'],
+      required: [true, 'Please select category'],
+      enum: {
+        values: PRODUCT_CATEGORIES,
+        message: 'Category must be one of: face, makeup, body, men',
+      },
       trim: true,
-      maxlength: [50, 'Danh mục tối đa 50 ký tự'],
+      lowercase: true,
     },
     image: {
       type: String,
       default: '',
       trim: true,
+    },
+    isBeautyMustHave: {
+      type: Boolean,
+      default: false,
     },
     createdAt: {
       type: Date,

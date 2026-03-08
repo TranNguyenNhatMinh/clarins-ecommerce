@@ -3,7 +3,7 @@
  * Dựa trên thiết kế Clarins-style, tách config từ constants
  */
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   APP_NAME,
@@ -16,6 +16,7 @@ import {
 export default function Header() {
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -48,7 +49,7 @@ export default function Header() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Tìm kiếm..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-4 pr-11 py-2.5 text-sm text-gray-800 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 placeholder-gray-400"
@@ -56,7 +57,7 @@ export default function Header() {
               <button
                 type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-500 hover:text-gray-700 transition"
-                aria-label="Tìm kiếm"
+                aria-label="Search"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -66,16 +67,20 @@ export default function Header() {
             </form>
           </div>
 
-          {/* Giữa: logo cố định ở giữa */}
+          {/* Center: logo - link to home; prevent navigation if already on home to avoid reload */}
           <Link
             to={ROUTES.home}
-            className="flex-shrink-0 flex items-center justify-center h-11 md:h-12 min-w-[140px] px-4"
+            onClick={(e) => { if (location.pathname === ROUTES.home) e.preventDefault(); }}
+            className="flex-shrink-0 flex items-center justify-center h-11 md:h-12 min-w-[140px] px-4 cursor-pointer block"
+            title="Home"
+            aria-label="Go to home"
           >
             {HEADER_LOGO ? (
               <img
                 src={HEADER_LOGO}
                 alt={APP_NAME}
-                className="h-full w-auto max-h-12 object-contain object-center"
+                className="h-full w-auto max-h-12 object-contain object-center pointer-events-none select-none"
+                draggable={false}
               />
             ) : (
               <span className="px-5 py-2.5 bg-brand text-white font-semibold text-base md:text-lg tracking-[0.2em] uppercase hover:bg-brand-600 transition">
@@ -91,7 +96,7 @@ export default function Header() {
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="p-2.5 text-gray-600 hover:text-gray-900 transition relative"
-                aria-label="Tài khoản"
+                aria-label="Account"
               >
                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -127,7 +132,7 @@ export default function Header() {
                           onClick={handleLogout}
                           className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
                         >
-                          Đăng xuất
+                          Log out
                         </button>
                       </>
                     ) : (
@@ -137,14 +142,14 @@ export default function Header() {
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                           onClick={() => setUserMenuOpen(false)}
                         >
-                          Đăng nhập
+                          Log in
                         </Link>
                         <Link
                           to={ROUTES.register}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                           onClick={() => setUserMenuOpen(false)}
                         >
-                          Đăng ký
+                          Sign up
                         </Link>
                       </>
                     )}
@@ -157,7 +162,7 @@ export default function Header() {
             <Link
               to={ROUTES.products}
               className="p-2.5 text-gray-600 hover:text-gray-900 transition"
-              aria-label="Yêu thích"
+              aria-label="Wishlist"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -168,7 +173,7 @@ export default function Header() {
             <Link
               to={ROUTES.products}
               className="p-2.5 text-gray-600 hover:text-gray-900 transition"
-              aria-label="Giỏ hàng"
+              aria-label="Cart"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />

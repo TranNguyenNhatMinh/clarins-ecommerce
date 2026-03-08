@@ -23,12 +23,13 @@ export default function AdminLayout() {
         </div>
         <nav className="p-2 flex-1">
           <NavLink to={ROUTES.admin.dashboard} className={navClass}>Dashboard</NavLink>
-          <NavLink to={ROUTES.admin.products} className={navClass}>Quản lý sản phẩm</NavLink>
-          <NavLink to={ROUTES.admin.users} className={navClass}>Quản lý user</NavLink>
+          <NavLink to={ROUTES.admin.products} className={navClass}>Product management</NavLink>
+          <NavLink to={ROUTES.admin.users} className={navClass}>User management</NavLink>
+          <NavLink to={ROUTES.admin.subscribers} className={navClass}>Newsletter / Subscribers</NavLink>
         </nav>
         <div className="p-2 border-t">
-          <Link to={ROUTES.home} className="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100">Về trang chủ</Link>
-          <button onClick={handleLogout} className="block w-full text-left px-4 py-3 rounded-lg text-red-600 hover:bg-gray-100">Đăng xuất</button>
+          <Link to={ROUTES.home} className="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100">Back to home</Link>
+          <button onClick={handleLogout} className="block w-full text-left px-4 py-3 rounded-lg text-red-600 hover:bg-gray-100">Log out</button>
         </div>
       </aside>
       <div className="flex-1 overflow-auto">

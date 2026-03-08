@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { PRODUCT_CATEGORIES } from '../../constants/index.js';
 
 export default function ProductForm({ initial, onClose, onSubmit, title }) {
   const [name, setName] = useState('');
@@ -6,6 +7,7 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [image, setImage] = useState('');
+  const [isBeautyMustHave, setIsBeautyMustHave] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -14,32 +16,51 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
       setName(initial.name || '');
       setDescription(initial.description || '');
       setPrice(initial.price?.toString() || '');
-      setCategory(initial.category || '');
+      const cat = (initial.category || '').toLowerCase();
+      setCategory(PRODUCT_CATEGORIES.includes(cat) ? cat : '');
       setImage(initial.image || '');
+      setIsBeautyMustHave(Boolean(initial.isBeautyMustHave));
     } else {
-      // Create mode: reset form
       setName('');
       setDescription('');
       setPrice('');
       setCategory('');
       setImage('');
+      setIsBeautyMustHave(false);
     }
   }, [initial]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const numPrice = parseFloat(price);
-    if (isNaN(numPrice) || numPrice < 0) {
-      setError('Giá phải là số không âm.');
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      setError('Please enter product name.');
+      return;
+    }
+    const cat = category.trim().toLowerCase();
+    if (!cat || !PRODUCT_CATEGORIES.includes(cat)) {
+      setError('Please select a category (face, makeup, body, or men).');
+      return;
+    }
+    const numPrice = parseFloat(String(price).replace(/,/g, ''));
+    if (Number.isNaN(numPrice) || numPrice < 0) {
+      setError('Price must be a non-negative number.');
       return;
     }
     setLoading(true);
     try {
-      await onSubmit({ name, description, price: numPrice, category, image });
+      await onSubmit({
+        name: trimmedName,
+        description: description.trim(),
+        price: numPrice,
+        category: cat,
+        image: image.trim(),
+        isBeautyMustHave,
+      });
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi xảy ra.');
+      setError(err.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -55,30 +76,54 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Product name *</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2 border rounded-lg" rows={3} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Giá (VNĐ) *</label>
-            <input type="number" min={0} step={1000} value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+            <input type="number" min={0} step="any" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required placeholder="0" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Danh mục *</label>
-            <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            >
+              <option value="">Select category</option>
+              {PRODUCT_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c.charAt(0).toUpperCase() + c.slice(1)}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL hình ảnh</label>
-            <input type="url" value={image} onChange={(e) => setImage(e.target.value)} className="w-full px-4 py-2 border rounded-lg" placeholder="https://..." />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+            <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full px-4 py-2 border rounded-lg" placeholder="https://... or image path" />
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isBeautyMustHave"
+              checked={isBeautyMustHave}
+              onChange={(e) => setIsBeautyMustHave(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <label htmlFor="isBeautyMustHave" className="text-sm font-medium text-gray-700">
+              Show in Beauty Must Have (homepage)
+            </label>
           </div>
           <div className="flex gap-2 pt-2">
             <button type="submit" disabled={loading} className="flex-1 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50">
-              {loading ? 'Đang lưu...' : 'Lưu'}
+              {loading ? 'Saving...' : 'Save'}
             </button>
-            <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-50">Hủy</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
           </div>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Toast from '../components/Toast';
@@ -12,32 +12,35 @@ export default function Login() {
   const { login, user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
+  // Redirect when already logged in (avoid navigate during render)
+  useEffect(() => {
+    if (!user) return;
+    navigate(isAdmin ? ROUTES.admin.dashboard : ROUTES.home);
+  }, [user, isAdmin, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage({ text: '', type: 'success' });
     try {
       await login(email, password);
-      setMessage({ text: 'Đăng nhập thành công!', type: 'success' });
+      setMessage({ text: 'Login successful!', type: 'success' });
       setTimeout(() => {
         navigate(isAdmin ? ROUTES.admin.dashboard : ROUTES.home);
       }, 500);
     } catch (err) {
-      setMessage({ text: err.response?.data?.message || 'Đăng nhập thất bại.', type: 'error' });
+      setMessage({ text: err.response?.data?.message || 'Login failed.', type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
-  if (user) {
-    navigate(isAdmin ? ROUTES.admin.dashboard : ROUTES.home);
-    return null;
-  }
+  if (user) return null;
 
   return (
     <div className="max-w-md mx-auto px-4 py-12">
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Đăng nhập</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Log in</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -51,7 +54,7 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
               value={password}
@@ -65,11 +68,11 @@ export default function Login() {
             disabled={loading}
             className="w-full py-2.5 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50"
           >
-            {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+            {loading ? 'Signing in...' : 'Log in'}
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
-          Chưa có tài khoản? <Link to={ROUTES.register} className="text-primary-600 hover:underline">Đăng ký</Link>
+          Don't have an account? <Link to={ROUTES.register} className="text-primary-600 hover:underline">Sign up</Link>
         </p>
       </div>
       {message.text && <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />}

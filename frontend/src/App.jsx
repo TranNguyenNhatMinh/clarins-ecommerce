@@ -1,5 +1,7 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { navigateRef } from './api/navigateRef.js';
 
 // Layout
 import Layout from './components/Layout';
@@ -19,6 +21,7 @@ import Profile from './pages/Profile';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminSubscribers from './pages/admin/AdminSubscribers';
 
 // Protected route: cần đăng nhập
 function ProtectedRoute({ children }) {
@@ -38,6 +41,12 @@ function AdminRoute({ children }) {
 }
 
 export default function App() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigateRef.current = navigate;
+    return () => { navigateRef.current = null; };
+  }, [navigate]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -54,6 +63,7 @@ export default function App() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="subscribers" element={<AdminSubscribers />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

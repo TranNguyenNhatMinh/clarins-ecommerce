@@ -9,23 +9,23 @@ import config from './config/index.js';
 const { port, mongodbUri, jwt } = config;
 
 if (!mongodbUri) {
-  console.error('✗ Thiếu MONGODB_URI trong .env');
+  console.error('✗ Missing MONGODB_URI in .env');
   process.exit(1);
 }
 if (!jwt.secret) {
-  console.error('✗ Thiếu JWT_SECRET trong .env (cần đặt giá trị bảo mật khi chạy thật)');
+  console.error('✗ Missing JWT_SECRET in .env (set a secure value for production)');
   process.exit(1);
 }
 
 mongoose
   .connect(mongodbUri)
   .then(() => {
-    console.log('✓ Đã kết nối MongoDB');
+    console.log('✓ Connected to MongoDB');
     app.listen(port, () => {
-      console.log(`✓ Server chạy tại http://localhost:${port}`);
+      console.log(`✓ Server running at http://localhost:${port}`);
     });
   })
   .catch((err) => {
-    console.error('✗ Lỗi kết nối MongoDB:', err.message);
+    console.error('✗ MongoDB connection error:', err.message);
     process.exit(1);
   });

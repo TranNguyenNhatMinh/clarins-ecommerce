@@ -23,14 +23,14 @@ export default function AdminUsers() {
   }, []);
 
   const handleDelete = (id, name) => {
-    if (!window.confirm(`Bạn có chắc muốn xóa user "${name}"?`)) return;
+    if (!window.confirm(`Are you sure you want to delete user "${name}"?`)) return;
     adminService
       .deleteUser(id)
       .then(() => {
-        setMessage({ text: 'Đã xóa user.', type: 'success' });
+        setMessage({ text: 'User deleted.', type: 'success' });
         fetchUsers();
       })
-      .catch((err) => setMessage({ text: err.response?.data?.message || 'Xóa thất bại.', type: 'error' }));
+      .catch((err) => setMessage({ text: err.response?.data?.message || 'Delete failed.', type: 'error' }));
   };
 
   const isCurrentUser = (u) => String(u._id) === String(currentUser?.id);
@@ -39,16 +39,16 @@ export default function AdminUsers() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Quản lý user</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">User management</h2>
       <div className="bg-white rounded-xl shadow border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vai trò</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -67,7 +67,7 @@ export default function AdminUsers() {
                       className="text-red-600 hover:underline text-sm disabled:opacity-50"
                       disabled={isCurrentUser(u)}
                     >
-                      Xóa
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -75,7 +75,7 @@ export default function AdminUsers() {
             </tbody>
           </table>
         </div>
-        {users.length === 0 && <p className="p-6 text-center text-gray-500">Chưa có user nào.</p>}
+        {users.length === 0 && <p className="p-6 text-center text-gray-500">No users yet.</p>}
       </div>
       {message.text && <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />}
     </div>

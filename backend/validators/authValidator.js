@@ -1,17 +1,17 @@
 /**
- * Validation cho đăng ký, đăng nhập
+ * Validation for register and login
  */
 import { body, validationResult } from 'express-validator';
 
 export const registerValidation = [
-  body('name').trim().notEmpty().withMessage('Vui lòng nhập tên').isLength({ max: 50 }).withMessage('Tên tối đa 50 ký tự'),
-  body('email').trim().notEmpty().withMessage('Vui lòng nhập email').isEmail().withMessage('Email không hợp lệ'),
-  body('password').notEmpty().withMessage('Vui lòng nhập mật khẩu').isLength({ min: 6 }).withMessage('Mật khẩu tối thiểu 6 ký tự'),
+  body('name').trim().notEmpty().withMessage('Please enter your name').isLength({ max: 50 }).withMessage('Name must be at most 50 characters'),
+  body('email').trim().notEmpty().withMessage('Please enter email').isEmail().withMessage('Invalid email'),
+  body('password').notEmpty().withMessage('Please enter password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 ];
 
 export const loginValidation = [
-  body('email').trim().notEmpty().withMessage('Vui lòng nhập email').isEmail().withMessage('Email không hợp lệ'),
-  body('password').notEmpty().withMessage('Vui lòng nhập mật khẩu'),
+  body('email').trim().notEmpty().withMessage('Please enter email').isEmail().withMessage('Invalid email'),
+  body('password').notEmpty().withMessage('Please enter password'),
 ];
 
 export const validate = (req, res, next) => {

@@ -1,14 +1,16 @@
 /**
- * Hằng số dùng chung - dễ đổi brand/ copy sau này
+ * Shared constants - easy to change brand / copy later
  */
 export const APP_NAME = 'ProductHub';
 
-/** Đường dẫn logo header (file đặt trong public/, ví dụ: '/logo.png'). Để '' thì hiển thị chữ APP_NAME */
+/** Header logo path (file in public/, e.g. '/logo.png'). Use '' to show APP_NAME text */
 export const HEADER_LOGO = '/img/header_img/logo.svg';
 
 export const ROUTES = {
   home: '/',
   products: '/products',
+  /** Link to product list filtered by category (face, makeup, body, men) */
+  productsByCategory: (category) => `/products?category=${encodeURIComponent(category)}`,
   productDetail: (id) => `/products/${id}`,
   login: '/login',
   register: '/register',
@@ -17,75 +19,79 @@ export const ROUTES = {
     dashboard: '/admin/dashboard',
     products: '/admin/products',
     users: '/admin/users',
+    subscribers: '/admin/subscribers',
   },
 };
 
-/** Menu header - nhóm trái */
+/** Header menu - left group */
 export const HEADER_NAV_LEFT = [
   { label: "What's New", to: '/' },
   { label: 'Best Sellers', to: '/products' },
-  { label: 'Sản phẩm', to: '/products' },
-  { label: 'Quà tặng', to: '/products' },
-  { label: 'Khuyến mãi', to: '/' },
+  { label: 'Products', to: '/products' },
+  { label: 'Gifts', to: '/products' },
+  { label: 'Promotions', to: '/' },
 ];
 
-/** Menu header - nhóm phải */
+/** Header menu - right group */
 export const HEADER_NAV_RIGHT = [
-  { label: 'Dịch vụ', to: '/' },
-  { label: 'Giới thiệu', to: '/' },
+  { label: 'Services', to: '/' },
+  { label: 'About', to: '/' },
 ];
 
-/** Footer - 4 cột */
+/** Footer - 4 columns */
 export const FOOTER_COLUMNS = [
   {
-    title: 'Sản phẩm nổi bật',
+    title: 'Featured products',
     links: [
-      { label: 'Sản phẩm mới', to: '/products' },
-      { label: 'Bán chạy nhất', to: '/products' },
-      { label: 'Danh mục điện tử', to: '/products' },
-      { label: 'Danh mục phụ kiện', to: '/products' },
+      { label: 'New arrivals', to: '/products' },
+      { label: 'Best sellers', to: '/products' },
+      { label: 'Electronics', to: '/products' },
+      { label: 'Accessories', to: '/products' },
     ],
   },
   {
-    title: 'Hỗ trợ',
+    title: 'Support',
     links: [
-      { label: 'Theo dõi đơn hàng', to: '/' },
+      { label: 'Track order', to: '/' },
       { label: 'FAQ', to: '/' },
-      { label: 'Chính sách vận chuyển', to: '/' },
-      { label: 'Chính sách đổi trả', to: '/' },
-      { label: 'Phương thức thanh toán', to: '/' },
-      { label: 'Liên hệ', to: '/' },
+      { label: 'Shipping policy', to: '/' },
+      { label: 'Returns policy', to: '/' },
+      { label: 'Payment methods', to: '/' },
+      { label: 'Contact', to: '/' },
     ],
   },
   {
-    title: 'Dịch vụ',
+    title: 'Services',
     links: [
-      { label: 'Chương trình khách hàng thân thiết', to: '/' },
-      { label: 'Đăng ký nhận thông báo', to: '/' },
+      { label: 'Loyalty program', to: '/' },
+      { label: 'Newsletter signup', to: '/' },
       { label: 'Gift Card', to: '/' },
-      { label: 'Giới thiệu bạn bè', to: '/' },
-      { label: 'Tìm cửa hàng', to: '/' },
+      { label: 'Refer a friend', to: '/' },
+      { label: 'Store locator', to: '/' },
     ],
   },
   {
-    title: 'Về chúng tôi',
+    title: 'About us',
     links: [
-      { label: 'Giới thiệu', to: '/' },
-      { label: 'Cam kết', to: '/' },
-      { label: 'Tuyển dụng', to: '/' },
-      { label: 'Chương trình liên kết', to: '/' },
+      { label: 'About', to: '/' },
+      { label: 'Commitments', to: '/' },
+      { label: 'Careers', to: '/' },
+      { label: 'Affiliate program', to: '/' },
     ],
   },
 ];
+
+/** Product categories - must match backend (face, makeup, body, men) */
+export const PRODUCT_CATEGORIES = ['face', 'makeup', 'body', 'men'];
 
 /** Footer - legal links bottom bar */
 export const FOOTER_LEGAL_LINKS = [
-  { label: 'Điều khoản', to: '/' },
-  { label: 'Chính sách bảo mật', to: '/' },
+  { label: 'Terms', to: '/' },
+  { label: 'Privacy policy', to: '/' },
   { label: 'Sitemap', to: '/' },
 ];
 
-/** Footer - social links (icon = path d cho SVG) */
+/** Footer - social links */
 export const SOCIAL_LINKS = [
   { name: 'Facebook', href: '#' },
   { name: 'Instagram', href: '#' },

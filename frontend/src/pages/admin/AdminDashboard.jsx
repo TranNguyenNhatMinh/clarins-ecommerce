@@ -23,7 +23,7 @@ export default function AdminDashboard() {
         }
       })
       .catch(() => {
-        if (!cancelled) setError('Không tải được thống kê.');
+        if (!cancelled) setError('Failed to load stats.');
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -39,11 +39,11 @@ export default function AdminDashboard() {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link to={ROUTES.admin.users} className="bg-white rounded-xl shadow border p-6 hover:shadow-lg transition">
-          <h3 className="text-gray-500 font-medium">Tổng số user</h3>
+          <h3 className="text-gray-500 font-medium">Total users</h3>
           <p className="text-3xl font-bold text-primary-600 mt-2">{stats.users}</p>
         </Link>
         <Link to={ROUTES.admin.products} className="bg-white rounded-xl shadow border p-6 hover:shadow-lg transition">
-          <h3 className="text-gray-500 font-medium">Tổng số sản phẩm</h3>
+          <h3 className="text-gray-500 font-medium">Total products</h3>
           <p className="text-3xl font-bold text-primary-600 mt-2">{stats.products}</p>
         </Link>
       </div>

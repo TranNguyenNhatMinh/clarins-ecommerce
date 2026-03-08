@@ -1,10 +1,13 @@
 /**
  * Footer - Newsletter + 4 cột + bottom bar
- * Dựa trên thiết kế Clarins-style, config từ constants
+ * Form newsletter: validate email, gọi API subscribe, tránh trùng, loading & thông báo
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { APP_NAME, FOOTER_COLUMNS, FOOTER_LEGAL_LINKS, SOCIAL_LINKS } from '../constants/index.js';
+import { newsletterService } from '../api/services/newsletterService.js';
+
+const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 const SocialIcon = ({ name }) => {
   const icons = {
@@ -24,13 +27,38 @@ const SocialIcon = ({ name }) => {
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: 'success' });
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleNewsletter = (e) => {
+  const validateEmail = (value) => {
+    const trimmed = (value || '').trim();
+    if (!trimmed) return 'Vui lòng nhập email.';
+    if (!EMAIL_REGEX.test(trimmed)) return 'Email không hợp lệ.';
+    return null;
+  };
+
+  const handleNewsletter = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
+    const trimmed = email.trim();
+    const err = validateEmail(trimmed);
+    if (err) {
+      setMessage({ text: err, type: 'error' });
+      return;
+    }
+    if (loading || subscribed) return;
+    setLoading(true);
+    setMessage({ text: '', type: 'success' });
+    try {
+      await newsletterService.subscribe(trimmed);
       setSubscribed(true);
       setEmail('');
+      setMessage({ text: 'Đăng ký nhận tin thành công.', type: 'success' });
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+      setMessage({ text: msg, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,25 +66,33 @@ export default function Footer() {
     <footer className="bg-stone-50 text-gray-700 mt-auto">
       {/* Newsletter - upper footer */}
       <section className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-14 text-center">
-        <h3 className="text-lg font-semibold text-gray-800 mb-1 tracking-wide">Đăng ký nhận bản tin</h3>
-        <p className="text-sm text-gray-500 mb-6">Giảm 10% cho đơn hàng đầu tiên</p>
+        <h3 className="text-lg font-semibold text-gray-800 mb-1 tracking-wide">Sign up for our newsletter</h3>
+        <p className="text-sm text-gray-500 mb-6">10% off your first order</p>
         <form onSubmit={handleNewsletter} className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
           <input
             type="email"
-            placeholder="Nhập địa chỉ email"
+            placeholder="Enter your email address"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={subscribed}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (message.text) setMessage({ text: '', type: 'success' });
+            }}
+            disabled={subscribed || loading}
             className="flex-1 min-w-0 px-4 py-3 border border-gray-300 rounded-sm bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 disabled:bg-gray-100 text-sm"
           />
           <button
             type="submit"
-            disabled={subscribed}
+            disabled={subscribed || loading}
             className="px-8 py-3 bg-brand text-white text-sm font-medium tracking-widest uppercase hover:bg-brand-600 transition disabled:opacity-70 disabled:cursor-not-allowed rounded-sm"
           >
-            {subscribed ? 'Đã đăng ký' : 'Đăng ký'}
+            {loading ? '...' : subscribed ? 'Subscribed' : 'Subscribe'}
           </button>
         </form>
+        {message.text && (
+          <p className={`mt-3 text-sm ${message.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
+            {message.text}
+          </p>
+        )}
       </section>
 
       {/* 4 cột link */}
@@ -112,8 +148,8 @@ export default function Footer() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span>Khu vực:</span>
-              <span className="text-gray-700">Việt Nam (Tiếng Việt)</span>
+              <span>Region:</span>
+              <span className="text-gray-700">United States (English)</span>
             </div>
           </div>
         </div>
