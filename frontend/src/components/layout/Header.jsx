@@ -1,17 +1,16 @@
 /**
  * Header - 2 hàng: search + logo + icons, nav links
- * Dựa trên thiết kế Clarins-style, tách config từ constants
  */
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   APP_NAME,
   ROUTES,
   HEADER_LOGO,
   HEADER_NAV_LEFT,
   HEADER_NAV_RIGHT,
-} from '../constants/index.js';
+} from '../../constants/index.js';
 
 export default function Header() {
   const { user, logout, isAdmin } = useAuth();
@@ -40,10 +39,8 @@ export default function Header() {
 
   return (
     <header className="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100">
-      {/* Hàng 1: Search | Logo | Icons */}
       <div className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5">
         <div className="flex items-center h-16 md:h-[72px]">
-          {/* Trái: search - chiếm 1 phần bằng với bên phải để logo giữa thật */}
           <div className="flex-1 flex items-center justify-start min-w-0 pr-2">
             <form onSubmit={handleSearch} className="w-full max-w-[280px]">
             <div className="relative">
@@ -67,7 +64,6 @@ export default function Header() {
             </form>
           </div>
 
-          {/* Center: logo - link to home; prevent navigation if already on home to avoid reload */}
           <Link
             to={ROUTES.home}
             onClick={(e) => { if (location.pathname === ROUTES.home) e.preventDefault(); }}
@@ -89,9 +85,7 @@ export default function Header() {
             )}
           </Link>
 
-          {/* Phải: icons - chiếm 1 phần bằng bên trái */}
           <div className="flex-1 flex items-center justify-end gap-1 sm:gap-3 min-w-0 pl-2">
-            {/* User icon */}
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -158,7 +152,6 @@ export default function Header() {
               )}
             </div>
 
-            {/* Wishlist */}
             <Link
               to={ROUTES.products}
               className="p-2.5 text-gray-600 hover:text-gray-900 transition"
@@ -169,7 +162,6 @@ export default function Header() {
               </svg>
             </Link>
 
-            {/* Cart */}
             <Link
               to={ROUTES.products}
               className="p-2.5 text-gray-600 hover:text-gray-900 transition"
@@ -180,7 +172,6 @@ export default function Header() {
               </svg>
             </Link>
 
-            {/* Mobile menu toggle */}
             <button
               type="button"
               className="md:hidden p-2.5 text-gray-600 hover:text-gray-900"
@@ -198,7 +189,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Hàng 2: Nav - nhóm trái & nhóm phải, đường kẻ dưới */}
         <nav className="hidden md:flex items-center justify-between py-4 border-t border-gray-200">
           <div className="flex items-center gap-6 lg:gap-8">
             {HEADER_NAV_LEFT.map((item) => (
@@ -224,7 +214,6 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Mobile nav dropdown */}
         {menuOpen && (
           <nav className="md:hidden py-4 border-t border-gray-200 space-y-1">
             {[...HEADER_NAV_LEFT, ...HEADER_NAV_RIGHT].map((item) => (

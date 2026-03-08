@@ -20,6 +20,7 @@ export const ROUTES = {
     products: '/admin/products',
     users: '/admin/users',
     subscribers: '/admin/subscribers',
+    chat: '/admin/chat',
   },
 };
 

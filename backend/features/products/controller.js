@@ -1,10 +1,10 @@
 /**
- * Product controller - CRUD sản phẩm (public + admin)
+ * Product - CRUD sản phẩm (public + admin)
  */
-import Product from '../models/Product.js';
+import Product from '../../models/Product.js';
 
-// GET /api/products - list products (public). Query: category=face|makeup|body|men, beautyMustHave=true
 const PRODUCT_CATEGORIES = ['face', 'makeup', 'body', 'men'];
+
 export const getProducts = async (req, res, next) => {
   try {
     const filter = {};
@@ -21,7 +21,6 @@ export const getProducts = async (req, res, next) => {
   }
 };
 
-// GET /api/products/:id - chi tiết sản phẩm (public)
 export const getProductById = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -34,7 +33,6 @@ export const getProductById = async (req, res, next) => {
   }
 };
 
-// POST /api/products - tạo sản phẩm (admin)
 export const createProduct = async (req, res, next) => {
   try {
     const body = { ...req.body };
@@ -46,8 +44,8 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
-// PUT /api/products/:id - sửa sản phẩm (admin) - chỉ cập nhật field cho phép
 const ALLOWED_PRODUCT_FIELDS = ['name', 'description', 'price', 'category', 'image', 'isBeautyMustHave'];
+
 export const updateProduct = async (req, res, next) => {
   try {
     const updates = {};
@@ -75,7 +73,6 @@ export const updateProduct = async (req, res, next) => {
   }
 };
 
-// DELETE /api/products/:id - xóa sản phẩm (admin)
 export const deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);

@@ -1,5 +1,5 @@
 /**
- * Validation cho newsletter subscribe - email đúng định dạng
+ * Validation cho newsletter subscribe
  */
 import { body, validationResult } from 'express-validator';
 

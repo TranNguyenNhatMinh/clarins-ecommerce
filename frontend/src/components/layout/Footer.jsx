@@ -1,11 +1,10 @@
 /**
  * Footer - Newsletter + 4 cột + bottom bar
- * Form newsletter: validate email, gọi API subscribe, tránh trùng, loading & thông báo
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { APP_NAME, FOOTER_COLUMNS, FOOTER_LEGAL_LINKS, SOCIAL_LINKS } from '../constants/index.js';
-import { newsletterService } from '../api/services/newsletterService.js';
+import { APP_NAME, FOOTER_COLUMNS, FOOTER_LEGAL_LINKS, SOCIAL_LINKS } from '../../constants/index.js';
+import { newsletterService } from '../../api/services/newsletterService.js';
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
@@ -64,7 +63,6 @@ export default function Footer() {
 
   return (
     <footer className="bg-stone-50 text-gray-700 mt-auto">
-      {/* Newsletter - upper footer */}
       <section className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-14 text-center">
         <h3 className="text-lg font-semibold text-gray-800 mb-1 tracking-wide">Sign up for our newsletter</h3>
         <p className="text-sm text-gray-500 mb-6">10% off your first order</p>
@@ -95,13 +93,12 @@ export default function Footer() {
         )}
       </section>
 
-      {/* 4 cột link */}
-      <div className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-14 border-t border-gray-200">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+      <div className="w-full max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-14 border-t border-gray-200">
+        <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10 lg:gap-x-12 lg:gap-y-12">
           {FOOTER_COLUMNS.map((col) => (
             <div key={col.title}>
               <h4 className="text-xs font-semibold text-gray-800 mb-4 uppercase tracking-widest">{col.title}</h4>
-              <ul className="space-y-3 text-sm text-gray-600">
+              <ul className="flex flex-col gap-3 text-sm text-gray-600">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link to={link.to} className="hover:text-gray-900 transition">
@@ -114,9 +111,8 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Social icons */}
-        <div className="mt-12">
-          <div className="flex justify-center lg:justify-start gap-3">
+        <div className="mt-12 flex justify-center">
+          <div className="flex gap-3">
             {SOCIAL_LINKS.map((s) => (
               <a
                 key={s.name}
@@ -133,7 +129,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar - copyright + legal + region */}
       <div className="border-t border-gray-200 bg-stone-50">
         <div className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-gray-500">
@@ -153,7 +148,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="h-0.5 bg-brand" />
+        <div className="h-1.5 bg-brand" />
       </div>
     </footer>
   );

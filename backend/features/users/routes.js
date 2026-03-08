@@ -1,7 +1,7 @@
 import express from 'express';
-import { protect } from '../middleware/auth.js';
-import { getProfile, updateProfile } from '../controllers/userController.js';
-import { updateProfileValidation, validate } from '../validators/userValidator.js';
+import { protect } from '../../middleware/auth.js';
+import { getProfile, updateProfile } from './controller.js';
+import { updateProfileValidation, validate } from './validator.js';
 
 const router = express.Router();
 

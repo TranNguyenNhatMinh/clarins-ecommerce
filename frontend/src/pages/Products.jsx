@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { productService } from '../api/services/productService.js';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { ROUTES, PRODUCT_CATEGORIES } from '../constants/index.js';
 
 const CATEGORY_LABELS = { face: 'Face', makeup: 'Makeup', body: 'Body', men: 'Men' };

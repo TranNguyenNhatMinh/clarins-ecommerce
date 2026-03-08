@@ -30,11 +30,11 @@ const Icon = ({ name }) => {
 
 export default function USPStrip() {
   return (
-    <section className="bg-white border-b border-gray-100">
-      <div className="max-w-[88rem] mx-auto px-3 sm:px-4 lg:px-5 py-6">
+    <section className="bg-brand border-b border-brand-600">
+      <div className="max-w-[88rem] mx-auto px-3 sm:px-4 lg:px-5 py-2.5 sm:py-3 md:py-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 justify-items-center text-center">
           {USP_ITEMS.map((item) => (
-            <div key={item.icon} className="flex flex-col items-center gap-2 text-gray-600">
+            <div key={item.icon} className="flex flex-col items-center gap-2 text-white">
               <Icon name={item.icon} />
               <span className="text-sm font-medium tracking-wide">{item.text}</span>
             </div>

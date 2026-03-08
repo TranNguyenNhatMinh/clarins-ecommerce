@@ -2,7 +2,7 @@
  * Validation for Product (create, update)
  */
 import { body, validationResult } from 'express-validator';
-import { PRODUCT_CATEGORIES } from '../constants/product.js';
+import { PRODUCT_CATEGORIES } from '../../constants/product.js';
 
 export const createProductValidation = [
   body('name').trim().notEmpty().withMessage('Please enter product name').isLength({ max: 100 }).withMessage('Name must be at most 100 characters'),

@@ -6,17 +6,17 @@ import { SERVICES } from '../../constants/homeConfig.js';
 
 export default function ServicesSection() {
   return (
-    <section className="bg-white py-16 md:py-24 border-t border-gray-100">
+    <section className="bg-white py-10 sm:py-14 md:py-16 lg:py-20 border-t border-gray-100">
       <div className="max-w-[88rem] mx-auto px-3 sm:px-4 lg:px-5">
-        <header className="text-center mb-12 md:mb-16">
-          <h2 className="text-2xl md:text-3xl font-light text-gray-900 tracking-wide mb-2">
+        <header className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-light text-gray-900 tracking-wide mb-2">
             Our exclusive services
           </h2>
           <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
             Brand experience
           </p>
         </header>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6 lg:gap-8 max-w-5xl mx-auto">
           {SERVICES.map((s) => (
             <Link
               key={s.title}

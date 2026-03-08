@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
+import Header from './layout/Header';
+import Footer from './layout/Footer';
+import ChatWidget from './chat/ChatWidget';
 
 export default function Layout() {
   const location = useLocation();
@@ -13,6 +14,7 @@ export default function Layout() {
         </div>
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }

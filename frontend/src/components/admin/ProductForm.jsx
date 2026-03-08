@@ -35,17 +35,17 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
     setError('');
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError('Please enter product name.');
+      setError('Vui lòng nhập tên sản phẩm.');
       return;
     }
     const cat = category.trim().toLowerCase();
     if (!cat || !PRODUCT_CATEGORIES.includes(cat)) {
-      setError('Please select a category (face, makeup, body, or men).');
+      setError('Vui lòng chọn danh mục (face, makeup, body, men).');
       return;
     }
     const numPrice = parseFloat(String(price).replace(/,/g, ''));
     if (Number.isNaN(numPrice) || numPrice < 0) {
-      setError('Price must be a non-negative number.');
+      setError('Giá phải là số không âm.');
       return;
     }
     setLoading(true);
@@ -60,42 +60,74 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
       });
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong.');
+      setError(err.response?.data?.message || 'Có lỗi xảy ra.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b flex justify-between items-center">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <button type="button" onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl leading-none">×</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-admin-card rounded-admin-lg shadow-admin-lg max-w-lg w-full max-h-[90vh] overflow-y-auto border border-admin-border">
+        <div className="sticky top-0 bg-admin-card px-6 py-4 border-b border-admin-border flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-admin-text">{title}</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-admin text-admin-muted hover:bg-gray-100 hover:text-admin-text transition-colors"
+            aria-label="Đóng"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-admin">{error}</p>
+          )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product name *</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
+            <label className="block text-sm font-medium text-admin-text mb-1.5">Tên sản phẩm *</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-admin border border-admin-border text-admin-text placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+              required
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2 border rounded-lg" rows={3} />
+            <label className="block text-sm font-medium text-admin-text mb-1.5">Mô tả</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-admin border border-admin-border text-admin-text placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+              rows={3}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price *</label>
-            <input type="number" min={0} step="any" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required placeholder="0" />
+            <label className="block text-sm font-medium text-admin-text mb-1.5">Giá *</label>
+            <input
+              type="number"
+              min={0}
+              step="any"
+              inputMode="decimal"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-admin border border-admin-border text-admin-text placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+              required
+              placeholder="0"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+            <label className="block text-sm font-medium text-admin-text mb-1.5">Danh mục *</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 rounded-admin border border-admin-border text-admin-text bg-admin-card focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
               required
             >
-              <option value="">Select category</option>
+              <option value="">Chọn danh mục</option>
               {PRODUCT_CATEGORIES.map((c) => (
                 <option key={c} value={c}>
                   {c.charAt(0).toUpperCase() + c.slice(1)}
@@ -104,26 +136,42 @@ export default function ProductForm({ initial, onClose, onSubmit, title }) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-            <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full px-4 py-2 border rounded-lg" placeholder="https://... or image path" />
+            <label className="block text-sm font-medium text-admin-text mb-1.5">URL ảnh</label>
+            <input
+              type="text"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-admin border border-admin-border text-admin-text placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+              placeholder="https://... hoặc đường dẫn ảnh"
+            />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <input
               type="checkbox"
               id="isBeautyMustHave"
               checked={isBeautyMustHave}
               onChange={(e) => setIsBeautyMustHave(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="w-4 h-4 rounded border-admin-border text-brand focus:ring-brand/20"
             />
-            <label htmlFor="isBeautyMustHave" className="text-sm font-medium text-gray-700">
-              Show in Beauty Must Have (homepage)
+            <label htmlFor="isBeautyMustHave" className="text-sm font-medium text-admin-text">
+              Hiển thị trong Beauty Must Have (trang chủ)
             </label>
           </div>
-          <div className="flex gap-2 pt-2">
-            <button type="submit" disabled={loading} className="flex-1 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50">
-              {loading ? 'Saving...' : 'Save'}
+          <div className="flex gap-3 pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 py-2.5 rounded-admin bg-brand text-white text-sm font-medium hover:bg-brand/90 disabled:opacity-50 transition-colors"
+            >
+              {loading ? 'Đang lưu...' : 'Lưu'}
             </button>
-            <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2.5 rounded-admin border border-admin-border text-admin-text text-sm font-medium hover:bg-gray-50 transition-colors"
+            >
+              Hủy
+            </button>
           </div>
         </form>
       </div>

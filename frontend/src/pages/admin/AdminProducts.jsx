@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { productService } from '../../api/services/productService.js';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import Toast from '../../components/Toast';
+import LoadingSpinner from '../../components/shared/LoadingSpinner';
+import Toast from '../../components/shared/Toast';
 import ProductForm from '../../components/admin/ProductForm';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ text: '', type: 'success' });
-  const [modal, setModal] = useState(null); // null | 'create' | { id: 'edit', product }
+  const [modal, setModal] = useState(null);
 
   const fetchProducts = () => {
     productService
@@ -27,7 +27,7 @@ export default function AdminProducts() {
     return productService
       .create(payload)
       .then(() => {
-        setMessage({ text: 'Product created successfully.', type: 'success' });
+        setMessage({ text: 'Đã tạo sản phẩm.', type: 'success' });
         setModal(null);
         fetchProducts();
       })
@@ -42,7 +42,7 @@ export default function AdminProducts() {
     return productService
       .update(id, payload)
       .then(() => {
-        setMessage({ text: 'Update successful.', type: 'success' });
+        setMessage({ text: 'Đã cập nhật.', type: 'success' });
         setModal(null);
         fetchProducts();
       })
@@ -53,90 +53,109 @@ export default function AdminProducts() {
   };
 
   const handleDelete = (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
+    if (!window.confirm(`Xóa sản phẩm "${name}"?`)) return;
     setLoading(true);
     productService
       .delete(id)
       .then(() => {
-        setMessage({ text: 'Product deleted.', type: 'success' });
+        setMessage({ text: 'Đã xóa sản phẩm.', type: 'success' });
         fetchProducts();
       })
       .catch((err) => {
-        setMessage({ text: err.response?.data?.message || 'Delete failed.', type: 'error' });
+        setMessage({ text: err.response?.data?.message || 'Xóa thất bại.', type: 'error' });
         setLoading(false);
       });
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner className="min-h-[320px]" />;
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Product management</h2>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-semibold text-admin-text">Quản lý sản phẩm</h1>
+          <p className="mt-1 text-sm text-admin-muted">Thêm, sửa, xóa sản phẩm</p>
+        </div>
         <button
           onClick={() => setModal('create')}
-          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          className="inline-flex items-center justify-center px-4 py-2.5 rounded-admin bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors shadow-admin"
         >
-          Add product
+          Thêm sản phẩm
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow border overflow-hidden">
+      <div className="bg-admin-card rounded-admin-lg border border-admin-border shadow-admin overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-admin-border">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beauty Must Have</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Ảnh</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Tên</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Giá</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Danh mục</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Nổi bật</th>
+                <th className="px-5 py-3.5 text-right text-xs font-medium text-admin-muted uppercase tracking-wider">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-admin-border bg-admin-card">
               {products.map((p) => (
-                <tr key={p._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
+                <tr key={p._id} className="hover:bg-gray-50/80 transition-colors">
+                  <td className="px-5 py-4">
                     {p.image ? (
-                      <img src={p.image} alt="" className="w-12 h-12 object-cover rounded" />
+                      <img src={p.image} alt="" className="w-12 h-12 object-cover rounded-admin" />
                     ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">No img</div>
+                      <div className="w-12 h-12 bg-gray-100 rounded-admin flex items-center justify-center text-admin-muted text-xs">—</div>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{p.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{new Intl.NumberFormat('en-US').format(p.price)} ₫</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{p.category || '—'}</td>
-                  <td className="px-6 py-4 text-sm">{p.isBeautyMustHave ? <span className="text-primary-600 font-medium">Yes</span> : <span className="text-gray-400">No</span>}</td>
-                  <td className="px-6 py-4 text-right space-x-2">
-                    <button onClick={() => setModal({ id: p._id, product: p })} className="text-primary-600 hover:underline text-sm">Edit</button>
-                    <button onClick={() => handleDelete(p._id, p.name)} className="text-red-600 hover:underline text-sm">Delete</button>
+                  <td className="px-5 py-4 text-sm font-medium text-admin-text">{p.name}</td>
+                  <td className="px-5 py-4 text-sm text-admin-muted">{new Intl.NumberFormat('vi-VN').format(p.price)} ₫</td>
+                  <td className="px-5 py-4 text-sm text-admin-muted">{p.category || '—'}</td>
+                  <td className="px-5 py-4">
+                    {p.isBeautyMustHave ? (
+                      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand/10 text-brand">Có</span>
+                    ) : (
+                      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-admin-muted">Không</span>
+                    )}
+                  </td>
+                  <td className="px-5 py-4 text-right space-x-3">
+                    <button
+                      onClick={() => setModal({ id: p._id, product: p })}
+                      className="text-sm font-medium text-brand hover:underline"
+                    >
+                      Sửa
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p._id, p.name)}
+                      className="text-sm font-medium text-red-600 hover:underline"
+                    >
+                      Xóa
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {products.length === 0 && <p className="p-6 text-center text-gray-500">No products yet.</p>}
+        {products.length === 0 && (
+          <p className="py-12 text-center text-sm text-admin-muted">Chưa có sản phẩm.</p>
+        )}
       </div>
 
       {modal === 'create' && (
-        <ProductForm
-          onClose={() => setModal(null)}
-          onSubmit={handleCreate}
-          title="Add product"
-        />
+        <ProductForm onClose={() => setModal(null)} onSubmit={handleCreate} title="Thêm sản phẩm" />
       )}
       {modal?.id && (
         <ProductForm
           initial={modal.product}
           onClose={() => setModal(null)}
           onSubmit={(payload) => handleUpdate(modal.id, payload)}
-          title="Edit product"
+          title="Chỉnh sửa sản phẩm"
         />
       )}
 
-      {message.text && <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />}
+      {message.text && (
+        <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />
+      )}
     </div>
   );
 }

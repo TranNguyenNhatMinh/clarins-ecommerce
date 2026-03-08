@@ -21,10 +21,10 @@ export const USP_ITEMS = [
 
 /** Category slugs must match PRODUCT_CATEGORIES (face, makeup, body, men) */
 export const CATEGORIES = [
-  { name: 'FACE', slug: 'face', tagline: 'Shop all Face', to: '/products?category=face', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80' },
-  { name: 'MAKEUP', slug: 'makeup', tagline: 'Shop all Makeup', to: '/products?category=makeup', image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80' },
-  { name: 'BODY', slug: 'body', tagline: 'Shop all Body', to: '/products?category=body', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80' },
-  { name: 'MEN', slug: 'men', tagline: 'Shop all Men', to: '/products?category=men', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=600&q=80' },
+  { name: 'FACE', slug: 'face', tagline: 'Shop all Face', to: '/products?category=face', image: 'https://www.clarinsusa.com/on/demandware.static/-/Library-Sites-clarins-v3/default/dw6a161555/Homepage_CBA/Highlights/HIGHLIGHT_FACE-CARE-2025.png' },
+  { name: 'MAKEUP', slug: 'makeup', tagline: 'Shop all Makeup', to: '/products?category=makeup', image: 'https://www.clarinsusa.com/on/demandware.static/-/Library-Sites-clarins-v3/default/dw7064c7fd/Homepage_CBA/Highlights/HIGHLIGHT_MAKE-UP-2025.png' },
+  { name: 'BODY', slug: 'body', tagline: 'Shop all Body', to: '/products?category=body', image: 'https://www.clarinsusa.com/on/demandware.static/-/Library-Sites-clarins-v3/default/dwf2edfec1/Homepage_CBA/Highlights/HIGHLIGHT_BODY-CARE-2025.png' },
+  { name: 'MEN', slug: 'men', tagline: 'Shop all Men', to: '/products?category=men', image: 'https://www.clarinsusa.com/on/demandware.static/-/Library-Sites-clarins-v3/default/dw17661fd5/Homepage_CBA/Highlights/HIGHLIGHT_MEN-SOIN-LISSANT-RIDES-FERMETE-2025.png' },
 ];
 
 export const HIGHLIGHT_PROMO = {
@@ -32,12 +32,12 @@ export const HIGHLIGHT_PROMO = {
   body: 'Discover why customers love our products.',
   ctaText: 'Shop now',
   ctaTo: '/products',
-  image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80',
+  image: 'https://bizweb.dktcdn.net/100/457/257/products/428619517-1591296254980348-2842381259070112768-n-jpg-nc-cat-102-ccb-1-7-nc-sid-5f2048-nc-ohc-rftchcag6raq7knvghxcdxz-nc-ht-scontent-fvca2-1-fna-oh-00-aydilujavemgpahejxdcfsw0sh39cktja6wxuxei4cwxyq-oe-6649267e.jpg?v=1715693114500',
 };
 
 export const SERVICES = [
-  { title: 'FIND YOUR SKIN SOLUTION', desc: 'Personalized consultation', to: '/', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80' },
-  { title: 'E-CONSULTATION', desc: 'Online consultation', to: '/', image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&q=80' },
-  { title: 'GIFT FINDER', desc: 'Find the perfect gift', to: '/products', image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&q=80' },
-  { title: 'VIRTUAL TRY-ON', desc: 'Try on virtually', to: '/', image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80' },
+  { title: 'FIND YOUR SKIN SOLUTION', desc: 'Personalized consultation', to: '/', image: 'img/body_3/first_image.png' },
+  { title: 'E-CONSULTATION', desc: 'Online consultation', to: '/', image: 'img/body_3/second_image.webp' },
+  { title: 'GIFT FINDER', desc: 'Find the perfect gift', to: '/products', image: 'img/body_3/third_image.webp' },
+  { title: 'VIRTUAL TRY-ON', desc: 'Try on virtually', to: '/', image: 'img/body_3/four_image.webp' },
 ];

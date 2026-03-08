@@ -1,12 +1,10 @@
 /**
- * Newsletter controller - đăng ký nhận tin (public)
- * Validate email, tránh trùng, lưu vào DB
+ * Newsletter - đăng ký nhận tin (public)
  */
-import Subscriber from '../models/Subscriber.js';
+import Subscriber from '../../models/Subscriber.js';
 
 const EMAIL_EXISTS_MESSAGE = 'Email này đã được đăng ký';
 
-// POST /api/newsletter/subscribe
 export const subscribe = async (req, res, next) => {
   try {
     const email = (req.body.email || '').trim().toLowerCase();

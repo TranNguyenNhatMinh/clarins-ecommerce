@@ -24,7 +24,7 @@ export default function HeroSection() {
         </p>
         <Link
           to={ctaTo}
-          className="inline-block px-8 py-3 bg-brand text-white font-semibold text-sm tracking-[0.2em] uppercase hover:bg-brand-600 shadow-md hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-200"
+          className="inline-flex items-center justify-center min-w-[180px] px-10 py-3.5 bg-white/95 text-brand font-medium text-sm tracking-[0.18em] uppercase rounded-md border border-white/80 shadow-lg hover:bg-brand hover:text-white hover:border-brand active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand/20 transition-all duration-1000"
         >
           {HERO.ctaText}
         </Link>

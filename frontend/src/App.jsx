@@ -22,6 +22,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminSubscribers from './pages/admin/AdminSubscribers';
+import AdminChat from './pages/admin/AdminChat';
 
 // Protected route: cần đăng nhập
 function ProtectedRoute({ children }) {
@@ -64,6 +65,7 @@ export default function App() {
         <Route path="products" element={<AdminProducts />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="subscribers" element={<AdminSubscribers />} />
+        <Route path="chat" element={<AdminChat />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

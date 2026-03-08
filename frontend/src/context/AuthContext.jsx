@@ -23,15 +23,17 @@ export function AuthProvider({ children }) {
     return () => { authRef.current = null; };
   }, []);
 
+  // Khôi phục đăng nhập từ localStorage khi refresh trang
   useEffect(() => {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     if (token && savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const u = JSON.parse(savedUser);
+        if (u && (u.id || u._id)) setUser(u);
       } catch (_) {
-        localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
       }
     }
     setLoading(false);

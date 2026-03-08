@@ -1,14 +1,15 @@
 /**
- * Express app - middleware và mount routes
+ * Express app - middleware và mount routes (theo feature)
  */
 import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler.js';
-import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import productRoutes from './routes/productRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
-import newsletterRoutes from './routes/newsletterRoutes.js';
+import authRoutes from './features/auth/routes.js';
+import userRoutes from './features/users/routes.js';
+import productRoutes from './features/products/routes.js';
+import adminRoutes from './features/admin/routes.js';
+import newsletterRoutes from './features/newsletter/routes.js';
+import chatRoutes from './features/chat/routes.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ ok: true, message: 'API running' }));

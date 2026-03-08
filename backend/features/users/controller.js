@@ -1,9 +1,8 @@
 /**
- * User controller - profile (xem, cập nhật)
+ * User - profile (xem, cập nhật)
  */
-import User from '../models/User.js';
+import User from '../../models/User.js';
 
-// GET /api/users/profile - xem thông tin cá nhân
 export const getProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -16,7 +15,6 @@ export const getProfile = async (req, res, next) => {
   }
 };
 
-// PUT /api/users/profile - cập nhật thông tin (name, không đổi email/password ở đây)
 export const updateProfile = async (req, res, next) => {
   try {
     const { name } = req.body;

@@ -1,7 +1,7 @@
 /**
- * Thanh thông báo mỏng trên cùng - tông premium, text nhỏ căn giữa
+ * Thanh thông báo mỏng trên cùng
  */
-import { ANNOUNCEMENT } from '../constants/homeConfig.js';
+import { ANNOUNCEMENT } from '../../constants/homeConfig.js';
 
 export default function AnnouncementBar() {
   return (

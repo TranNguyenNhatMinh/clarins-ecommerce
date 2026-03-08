@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../../api/services/adminService.js';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import Toast from '../../components/Toast';
+import LoadingSpinner from '../../components/shared/LoadingSpinner';
+import Toast from '../../components/shared/Toast';
+
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Mới nhất' },
   { value: 'oldest', label: 'Cũ nhất' },
@@ -43,14 +44,14 @@ export default function AdminSubscribers() {
   };
 
   const handleDelete = (id, email) => {
-    if (!window.confirm(`Remove subscriber "${email}" from the list?`)) return;
+    if (!window.confirm(`Gỡ đăng ký "${email}"?`)) return;
     adminService
       .deleteSubscriber(id)
       .then(() => {
-        setMessage({ text: 'Subscriber removed.', type: 'success' });
+        setMessage({ text: 'Đã gỡ đăng ký.', type: 'success' });
         fetchSubscribers();
       })
-      .catch((err) => setMessage({ text: err.response?.data?.message || 'Delete failed.', type: 'error' }));
+      .catch((err) => setMessage({ text: err.response?.data?.message || 'Thất bại.', type: 'error' }));
   };
 
   const formatDate = (dateStr) => {
@@ -60,28 +61,34 @@ export default function AdminSubscribers() {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Newsletter / Subscribers</h2>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-xl font-semibold text-admin-text">Newsletter / Subscribers</h1>
+        <p className="mt-1 text-sm text-admin-muted">Danh sách email đăng ký nhận tin</p>
+      </div>
 
-      <div className="mb-4 flex flex-col sm:flex-row gap-3 sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
         <form onSubmit={handleSearchSubmit} className="flex gap-2 flex-1 max-w-sm">
           <input
             type="text"
-            placeholder="Search by email..."
+            placeholder="Tìm theo email..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="flex-1 min-w-0 px-4 py-2.5 rounded-admin border border-admin-border text-sm text-admin-text placeholder-admin-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
           />
-          <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700">
-            Search
+          <button
+            type="submit"
+            className="px-4 py-2.5 rounded-admin bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
+          >
+            Tìm
           </button>
         </form>
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Sort:</label>
+          <label className="text-sm text-admin-muted">Sắp xếp:</label>
           <select
             value={sort}
             onChange={(e) => { setSort(e.target.value); setPage(1); }}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="px-4 py-2.5 rounded-admin border border-admin-border text-sm text-admin-text bg-admin-card focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
           >
             {SORT_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -90,37 +97,37 @@ export default function AdminSubscribers() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow border overflow-hidden">
+      <div className="bg-admin-card rounded-admin-lg border border-admin-border shadow-admin overflow-hidden">
         {loading ? (
           <LoadingSpinner className="py-12" />
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-admin-border">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subscribed at</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Email</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Đăng ký lúc</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-medium text-admin-muted uppercase tracking-wider">Trạng thái</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-medium text-admin-muted uppercase tracking-wider">Thao tác</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-admin-border bg-admin-card">
                   {list.map((s) => (
-                    <tr key={s._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{s.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDate(s.subscribedAt)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-0.5 rounded text-xs ${s.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}`}>
+                    <tr key={s._id} className="hover:bg-gray-50/80 transition-colors">
+                      <td className="px-5 py-4 text-sm font-medium text-admin-text">{s.email}</td>
+                      <td className="px-5 py-4 text-sm text-admin-muted">{formatDate(s.subscribedAt)}</td>
+                      <td className="px-5 py-4">
+                        <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           {s.status || 'active'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <td className="px-5 py-4 text-right">
                         <button
                           onClick={() => handleDelete(s._id, s.email)}
-                          className="text-red-600 hover:underline text-sm"
+                          className="text-sm font-medium text-red-600 hover:underline"
                         >
-                          Delete
+                          Xóa
                         </button>
                       </td>
                     </tr>
@@ -128,27 +135,29 @@ export default function AdminSubscribers() {
                 </tbody>
               </table>
             </div>
-            {list.length === 0 && <p className="p-6 text-center text-gray-500">No subscribers yet.</p>}
+            {list.length === 0 && (
+              <p className="py-12 text-center text-sm text-admin-muted">Chưa có subscriber.</p>
+            )}
 
             {pagination.totalPages > 1 && (
-              <div className="px-6 py-3 border-t border-gray-200 flex items-center justify-between text-sm">
-                <span className="text-gray-600">
-                  Total: {pagination.total} | Page {pagination.page} of {pagination.totalPages}
+              <div className="px-5 py-3 border-t border-admin-border flex flex-wrap items-center justify-between gap-3 text-sm">
+                <span className="text-admin-muted">
+                  Tổng {pagination.total} · Trang {pagination.page}/{pagination.totalPages}
                 </span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page <= 1}
-                    className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-50"
+                    className="px-3 py-2 rounded-admin border border-admin-border bg-admin-card text-admin-text hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
                   >
-                    Previous
+                    Trước
                   </button>
                   <button
                     onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                     disabled={page >= pagination.totalPages}
-                    className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-50"
+                    className="px-3 py-2 rounded-admin border border-admin-border bg-admin-card text-admin-text hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
                   >
-                    Next
+                    Sau
                   </button>
                 </div>
               </div>
@@ -157,7 +166,9 @@ export default function AdminSubscribers() {
         )}
       </div>
 
-      {message.text && <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />}
+      {message.text && (
+        <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />
+      )}
     </div>
   );
 }

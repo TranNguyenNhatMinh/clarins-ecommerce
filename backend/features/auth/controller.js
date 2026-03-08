@@ -1,9 +1,9 @@
 /**
- * Auth controller - đăng ký, đăng nhập, JWT
+ * Auth - đăng ký, đăng nhập, JWT
  */
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-import config from '../config/index.js';
+import User from '../../models/User.js';
+import config from '../../config/index.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, config.jwt.secret, {
@@ -11,7 +11,6 @@ const generateToken = (id) => {
   });
 };
 
-// POST /api/auth/register
 export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -37,7 +36,6 @@ export const register = async (req, res, next) => {
   }
 };
 
-// POST /api/auth/login
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;

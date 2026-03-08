@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { userService } from '../api/services/userService.js';
 import { useAuth } from '../context/AuthContext';
-import Toast from '../components/Toast';
-import LoadingSpinner from '../components/LoadingSpinner';
+import Toast from '../components/shared/Toast';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
