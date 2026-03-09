@@ -10,64 +10,46 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(null);
+  const [loading] = useState(false);
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
     setUser(null);
+    setToken(null);
   };
 
   useEffect(() => {
-    authRef.current = { logout };
+    authRef.current = {
+      logout,
+      getToken: () => token,
+    };
     return () => { authRef.current = null; };
-  }, []);
-
-  // Khôi phục đăng nhập từ localStorage khi refresh trang
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
-    if (token && savedUser) {
-      try {
-        const u = JSON.parse(savedUser);
-        if (u && (u.id || u._id)) setUser(u);
-      } catch (_) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-      }
-    }
-    setLoading(false);
-  }, []);
+  }, [logout, token]);
 
   const login = async (email, password) => {
     const data = await authService.login(email, password);
     const { user: u, token } = data.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(u));
     setUser(u);
+    setToken(token);
     return data;
   };
 
-  const register = async (name, email, password) => {
-    const data = await authService.register(name, email, password);
+  const register = async (name, email, password, phone) => {
+    const data = await authService.register(name, email, password, phone);
     const { user: u, token } = data.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(u));
+    // Tự động đăng nhập sau khi đăng ký thành công (lưu trong state, không persist)
     setUser(u);
+    setToken(token);
     return data;
   };
 
   const updateUser = (updated) => {
     setUser((prev) => (prev ? { ...prev, ...updated } : null));
-    const saved = localStorage.getItem('user');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      localStorage.setItem('user', JSON.stringify({ ...parsed, ...updated }));
-    }
   };
 
   const value = {
     user,
+    token,
     loading,
     login,
     register,

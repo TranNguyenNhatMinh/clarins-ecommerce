@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters'],
       select: false, // không trả password khi query mặc định
     },
+    phone: {
+      type: String,
+      trim: true,
+      maxlength: [20, 'Phone number must be at most 20 characters'],
+      match: [/^[0-9+\s\-()]*$/, 'Invalid phone number'],
+    },
     role: {
       type: String,
       enum: ['user', 'admin'],

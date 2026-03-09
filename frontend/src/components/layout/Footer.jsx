@@ -62,7 +62,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-stone-50 text-gray-700 mt-auto">
+    <footer className="bg-[#f6f0ea] text-gray-700 mt-auto border-t border-gray-200">
       <section className="max-w-[88rem] mx-auto px-2 sm:px-3 lg:px-3.5 py-14 text-center">
         <h3 className="text-lg font-semibold text-gray-800 mb-1 tracking-wide">Sign up for our newsletter</h3>
         <p className="text-sm text-gray-500 mb-6">10% off your first order</p>

@@ -13,9 +13,9 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Gắn token vào mọi request
+// Gắn token (trong bộ nhớ) vào mọi request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = authRef.current?.getToken?.();
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

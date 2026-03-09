@@ -9,7 +9,12 @@
     "dev": "node --watch server.js",
     "seed": "node scripts/seed.js"
   },
-  "keywords": ["express", "mongodb", "jwt", "mern"],
+  "keywords": [
+    "express",
+    "mongodb",
+    "jwt",
+    "mern"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

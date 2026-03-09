@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Toast from '../components/shared/Toast';
@@ -12,12 +12,6 @@ export default function Login() {
   const { login, user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect when already logged in (avoid navigate during render)
-  useEffect(() => {
-    if (!user) return;
-    navigate(isAdmin ? ROUTES.admin.dashboard : ROUTES.home);
-  }, [user, isAdmin, navigate]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,7 +21,7 @@ export default function Login() {
       setMessage({ text: 'Login successful!', type: 'success' });
       setTimeout(() => {
         navigate(isAdmin ? ROUTES.admin.dashboard : ROUTES.home);
-      }, 500);
+      }, 400);
     } catch (err) {
       setMessage({ text: err.response?.data?.message || 'Login failed.', type: 'error' });
     } finally {
@@ -38,44 +32,96 @@ export default function Login() {
   if (user) return null;
 
   return (
-    <div className="max-w-md mx-auto px-4 py-12">
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Log in</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="email@example.com"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50"
-          >
-            {loading ? 'Signing in...' : 'Log in'}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account? <Link to={ROUTES.register} className="text-primary-600 hover:underline">Sign up</Link>
+    <div className="px-4 py-10 flex justify-center">
+      <div className="w-full max-w-2xl">
+        <div className="mb-7">
+          <p className="text-xs text-gray-500 mb-1">Home / Log in</p>
+          <h1 className="text-3xl font-light text-gray-900 mb-2">Sign in or create an account</h1>
+          <p className="text-sm text-gray-600">
+            Please enter your email address and password.
+          </p>
+        </div>
+
+        <div className="bg-white border border-gray-200 shadow-sm px-7 py-6 w-full">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-sm focus:ring-1 focus:ring-gray-500 focus:border-gray-500 text-sm"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-1">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-sm focus:ring-1 focus:ring-gray-500 focus:border-gray-500 text-sm"
+                required
+              />
+            </div>
+            <div className="flex items-center text-xs text-gray-700">
+              <input
+                id="remember"
+                type="checkbox"
+                className="h-4 w-4 border-gray-300 text-brand focus:ring-brand mr-2"
+              />
+              <label htmlFor="remember">Remember me</label>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-2 py-2.5 bg-brand text-white text-sm font-semibold tracking-[0.18em] uppercase hover:bg-brand-600 disabled:opacity-60"
+            >
+              {loading ? 'Signing in…' : 'Continue'}
+            </button>
+          </form>
+        </div>
+
+        <p className="mt-4 text-sm text-gray-600">
+          Don&apos;t have an account yet?{' '}
+          <Link to={ROUTES.register} className="text-brand hover:underline font-medium">
+            Create one now
+          </Link>
+          .
         </p>
+
+        <section className="mt-6">
+          <div className="flex items-center gap-5 text-sm text-gray-800">
+            <div className="flex flex-col items-center text-[0.7rem] text-gray-800">
+              <div className="w-12 h-12 border border-gray-800 rounded-full flex items-center justify-center text-sm font-semibold tracking-[0.18em]">
+                B
+              </div>
+              <span className="mt-1 leading-tight text-[0.7rem] text-gray-700 text-center">
+                Certified
+                <br />
+                Corporation
+              </span>
+            </div>
+            <div>
+              <p className="text-sm text-gray-900">
+                This company meets high standards of social and environmental impact.
+              </p>
+              <button type="button" className="mt-1 text-xs text-gray-500 hover:underline">
+                Learn more
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {message.text && (
+          <Toast
+            message={message.text}
+            type={message.type}
+            onClose={() => setMessage({ text: '', type: 'success' })}
+          />
+        )}
       </div>
-      {message.text && <Toast message={message.text} type={message.type} onClose={() => setMessage({ text: '', type: 'success' })} />}
     </div>
   );
 }

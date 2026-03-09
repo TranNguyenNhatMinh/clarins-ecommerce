@@ -7,7 +7,7 @@ export const authService = {
   login(email, password) {
     return api.post('/auth/login', { email, password }).then((res) => res.data);
   },
-  register(name, email, password) {
-    return api.post('/auth/register', { name, email, password }).then((res) => res.data);
+  register(name, email, password, phone) {
+    return api.post('/auth/register', { name, email, password, phone }).then((res) => res.data);
   },
 };

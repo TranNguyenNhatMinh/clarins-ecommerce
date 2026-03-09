@@ -7,6 +7,14 @@ export const registerValidation = [
   body('name').trim().notEmpty().withMessage('Please enter your name').isLength({ max: 50 }).withMessage('Name must be at most 50 characters'),
   body('email').trim().notEmpty().withMessage('Please enter email').isEmail().withMessage('Invalid email'),
   body('password').notEmpty().withMessage('Please enter password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('phone')
+    .notEmpty()
+    .withMessage('Please enter phone number')
+    .trim()
+    .isLength({ min: 6, max: 20 })
+    .withMessage('Phone number must be between 6 and 20 characters')
+    .matches(/^[0-9+\s\-()]*$/)
+    .withMessage('Invalid phone number'),
 ];
 
 export const loginValidation = [

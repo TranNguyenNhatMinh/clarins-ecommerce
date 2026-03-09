@@ -195,7 +195,7 @@ export default function Header() {
               <Link
                 key={item.label}
                 to={item.to}
-                className="text-xs font-medium text-gray-600 hover:text-brand uppercase tracking-[0.12em] transition py-1 border-b border-transparent hover:border-brand"
+                className="nav-link text-xs font-medium text-gray-600 hover:text-brand uppercase tracking-[0.12em] transition py-1"
               >
                 {item.label}
               </Link>
@@ -206,7 +206,7 @@ export default function Header() {
               <Link
                 key={item.label}
                 to={item.to}
-                className="text-xs font-medium text-gray-600 hover:text-brand uppercase tracking-[0.12em] transition py-1 border-b border-transparent hover:border-brand"
+                className="nav-link text-xs font-medium text-gray-600 hover:text-brand uppercase tracking-[0.12em] transition py-1"
               >
                 {item.label}
               </Link>

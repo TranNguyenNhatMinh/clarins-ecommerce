@@ -5,6 +5,13 @@ import { body, validationResult } from 'express-validator';
 
 export const updateProfileValidation = [
   body('name').optional().trim().notEmpty().withMessage('Name cannot be empty').isLength({ max: 50 }).withMessage('Name must be at most 50 characters'),
+  body('phone')
+    .optional()
+    .trim()
+    .isLength({ min: 6, max: 20 })
+    .withMessage('Phone number must be between 6 and 20 characters')
+    .matches(/^[0-9+\s\-()]*$/)
+    .withMessage('Invalid phone number'),
 ];
 
 export const validate = (req, res, next) => {
